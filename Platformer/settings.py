@@ -13,19 +13,28 @@ print(img_Folder)
 
 # game title
 TITLE = "Platformer" #Sets title
+FONT_NAME = 'arial'
 
 # screen size
 WIDTH = 480 #sets width of screen
 HEIGHT = 600 #sets height of screen
 
 # Player Size
-PLAYER_HEIGHT = 40
-PLAYER_WIDTH = 30
+PLAYER_HEIGHT = 32
+PLAYER_WIDTH = 32
 
 #player properties
 PLAYER_ACC = 1
 PLAYER_FRICTION = -.12
+PLAYER_GRAV = 0.8
+PLAYER_JUMP = 20
 
+# starting platforms
+PLATFORM_LIST = [(0, HEIGHT - 40, WIDTH + (PLAYER_WIDTH * 2.5), 40),
+                 (WIDTH / 2 - 50, HEIGHT * 3 / 4, 100, 20),
+                 (20, HEIGHT - 350, 175, 20),
+                 (300, HEIGHT - 350, 150, 20),
+                 (100, 100, 300, 20)]
 # clock speed
 FPS = 60 #sets frames per second (clock tick)
 

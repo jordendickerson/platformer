@@ -16,8 +16,11 @@ class Player(pg.sprite.Sprite):
         self.vel = vec(0,0)
         self.acc = vec(0,0)
 
+    def jump(self):
+            self.vel.y = -PLAYER_JUMP
+
     def update(self):
-        self.acc = vec(0,.5)
+        self.acc = vec(0,PLAYER_GRAV)
         keys = pg.key.get_pressed()
         if keys[pg.K_LEFT] or keys[pg.K_a]:
             self.acc.x = -PLAYER_ACC

@@ -11,15 +11,30 @@ from sprites import *
 pg.init()
 pg.mixer.init()
 
+#set font name
+font_name = pg.font.match_font(FONT_NAME)
+
 def show_start_screen():
     pass
 
 def show_go_screen():
     pass
 
+def draw_text(surf, text, size, color, x, y):
+    font = pg.font.Font(font_name, size)
+    text_surface = font.render(text, True, color)
+    text_rect = text_surface.get_rect()
+    text_rect.midtop = (x, y)
+    surf.blit(text_surface, text_rect)
+
 
 def main():
     running = True
+
+    # set score
+    score = 0
+
+
     #Create game objects
     screen = pg.display.set_mode((WIDTH, HEIGHT))
     pg.display.set_caption(TITLE)
@@ -39,19 +54,24 @@ def main():
 
     # create enemy objects
 
+    # create platforms
+    for plat in PLATFORM_LIST:
+        p = Platform(*plat)
+        all_sprites.add(p)
+        platforms_group.add(p)
+
 
     #create player object
     player = Player()
 
-    #create platforms
-    p1 = Platform(0, HEIGHT - 40, WIDTH + (PLAYER_WIDTH*2.5), 40)
-    p2 = Platform(WIDTH / 2 - 50, HEIGHT * 3 /4, 100, 20)
+
 
     # add to sprite groups
-    all_sprites.add(player, p1, p2)
-    platforms_group.add(p1, p2)
-    enemy_group.add()
+    all_sprites.add(player)
     player_group.add(player)
+    platforms_group.add()
+    enemy_group.add()
+
 
     #start game loop
     while running:
@@ -63,6 +83,11 @@ def main():
 
                 if event.key == pg.K_ESCAPE:
                     running = False
+
+                if event.key == pg.K_SPACE or event.key == pg.K_w:
+                    hits = pg.sprite.spritecollide(player, platforms_group, False)
+                    if hits:
+                        player.jump()
             # if the X was clicked
             if event.type == pg.QUIT:
                 running = False
@@ -72,16 +97,44 @@ def main():
         # Update
         all_sprites.update()
 
-        #check for player-platform collision
-        hits = pg.sprite.spritecollide(player,platforms_group, False)
-        if hits:
-            player.pos.y = hits[0].rect.top
-            player.vel.y = 1
+        #check for player-platform collision - only if falling
+        if player.vel.y > 0:
+            hits = pg.sprite.spritecollide(player,platforms_group, False)
+            if hits:
+                player.pos.y = hits[0].rect.top
+                player.vel.y = 0
+
+        # if player reaches top 1/4 of screen
+        if player.rect.top <= HEIGHT / 4:
+            player.pos.y += abs(player.vel.y)
+            for plat in platforms_group:
+                plat.rect.y += abs(player.vel.y)
+                if plat.rect.top >= HEIGHT:
+                    plat.kill()
+                    score += 10
+
+        # span new platforms to keep same average number
+        while len(platforms_group) < 6:
+            width = random.randrange(50, 100)
+            p = Platform(random.randrange(0, WIDTH-width), random.randrange(-75, -30), width, 20)
+            platforms_group.add(p)
+            all_sprites.add(p)
+
+        # Die!
+        if player.rect.bottom > HEIGHT:
+            for sprite in all_sprites:
+                sprite.rect.y -= max(player.vel.y, 10)
+                if sprite.rect.bottom < 0:
+                    sprite.kill()
+
+        if len(platforms_group) == 0:
+            running = False
 
 
         # Draw (things drawn first are furthest back, things drawn last are closest. like painting.)
         screen.fill(BLACK) #fills screen with cornflower blue
         all_sprites.draw(screen) #draws all sprites on the screen
+        draw_text(screen, str(score), 22, WHITE, WIDTH / 2, 50)
 
         pg.display.flip() #flips screen MUST BE THE LAST THING CALLED
 
