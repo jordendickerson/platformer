@@ -14,11 +14,30 @@ pg.mixer.init()
 #set font name
 font_name = pg.font.match_font(FONT_NAME)
 
-def show_start_screen():
-    pass
+#set clock
+clock = pg.time.Clock()
+
+def show_start_screen(surf):
+    surf.fill(skyBlue)
+    draw_text(surf, TITLE, 48, WHITE, WIDTH / 2, HEIGHT / 4)
+    draw_text(surf, "Arrows to move, Space to Jump", 22, WHITE, WIDTH /2, HEIGHT / 2)
+    draw_text(surf, "Press any key to play", 22, WHITE, WIDTH / 2, HEIGHT * 3/4)
+    pg.display.flip()
+    waitForKey()
 
 def show_go_screen():
     pass
+
+def waitForKey():
+    waiting = True
+    while waiting:
+        clock.tick(FPS)
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                waiting = False
+            if event.type == pg.KEYUP:
+                waiting = False
+
 
 def draw_text(surf, text, size, color, x, y):
     font = pg.font.Font(font_name, size)
@@ -38,7 +57,7 @@ def main():
     #Create game objects
     screen = pg.display.set_mode((WIDTH, HEIGHT))
     pg.display.set_caption(TITLE)
-    clock = pg.time.Clock()
+
 
 
     # load assets
@@ -132,7 +151,7 @@ def main():
 
 
         # Draw (things drawn first are furthest back, things drawn last are closest. like painting.)
-        screen.fill(BLACK) #fills screen with cornflower blue
+        screen.fill(skyBlue) #fills screen with cornflower blue
         all_sprites.draw(screen) #draws all sprites on the screen
         draw_text(screen, str(score), 22, WHITE, WIDTH / 2, 50)
 
