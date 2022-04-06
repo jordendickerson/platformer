@@ -19,12 +19,12 @@ WIDTH = 480 #sets width of screen
 HEIGHT = 600 #sets height of screen
 
 # Player Size
-PLAYER_HEIGHT = WIDTH // 10
-PLAYER_WIDTH = WIDTH // 10
+PLAYER_HEIGHT = 40
+PLAYER_WIDTH = 30
 
 #player properties
 PLAYER_ACC = 1
-PLAYER_FRICTION = -0.12
+PLAYER_FRICTION = -.12
 
 # clock speed
 FPS = 60 #sets frames per second (clock tick)

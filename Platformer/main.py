@@ -5,7 +5,6 @@ from settings import *
 import pygame as pg
 from sprites import *
 
-#LEFT OFF AT 18:48 IN THE SECOND TUTORIAL
 
 
 # setup pygame
@@ -33,6 +32,7 @@ def main():
 
     # Create Sprite Groups
     all_sprites = pg.sprite.Group()
+    platforms_group = pg.sprite.Group()
     enemy_group = pg.sprite.Group()
     player_group = pg.sprite.Group()
 
@@ -43,9 +43,13 @@ def main():
     #create player object
     player = Player()
 
+    #create platforms
+    p1 = Platform(0, HEIGHT - 40, WIDTH + (PLAYER_WIDTH*2.5), 40)
+    p2 = Platform(WIDTH / 2 - 50, HEIGHT * 3 /4, 100, 20)
 
     # add to sprite groups
-    all_sprites.add(player)
+    all_sprites.add(player, p1, p2)
+    platforms_group.add(p1, p2)
     enemy_group.add()
     player_group.add(player)
 
@@ -67,6 +71,12 @@ def main():
 
         # Update
         all_sprites.update()
+
+        #check for player-platform collision
+        hits = pg.sprite.spritecollide(player,platforms_group, False)
+        if hits:
+            player.pos.y = hits[0].rect.top
+            player.vel.y = 1
 
 
         # Draw (things drawn first are furthest back, things drawn last are closest. like painting.)
