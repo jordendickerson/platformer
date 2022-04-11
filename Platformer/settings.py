@@ -7,8 +7,12 @@ game_Folder = os.path.dirname(__file__)
 assets_Folder = os.path.join(game_Folder, "assets")
 img_Folder = os.path.join(assets_Folder, "imgs")
 audio_Folder = os.path.join(assets_Folder, "audio")
+
 print(img_Folder)
 
+#High score file
+HS_FILE = "highscore.txt"
+highscore = open(os.path.join(game_Folder, HS_FILE), 'w')
 
 
 # game title

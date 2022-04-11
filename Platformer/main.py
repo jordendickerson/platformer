@@ -5,6 +5,8 @@ from settings import *
 import pygame as pg
 from sprites import *
 
+#CURRENT BUGS: High score will not read, but will write.
+
 
 
 # setup pygame
@@ -17,11 +19,22 @@ font_name = pg.font.match_font(FONT_NAME)
 #set clock
 clock = pg.time.Clock()
 
+def load_data():
+    #load high score
+    with open(os.path.join(game_Folder, HS_FILE), 'w') as f:
+        try:
+            highscore = int(f.read())
+        except:
+            highscore = 0
+    return highscore
+
 def show_start_screen(surf):
+    cur_highscore = str(load_data())
     surf.fill(skyBlue)
     draw_text(surf, TITLE, 48, WHITE, WIDTH / 2, HEIGHT / 4)
     draw_text(surf, "Arrows to move, Space to Jump", 22, WHITE, WIDTH /2, HEIGHT / 2)
     draw_text(surf, "Press any key to play", 22, WHITE, WIDTH / 2, HEIGHT * 3/4)
+    draw_text(surf, "High Score: "+cur_highscore, 22, WHITE, WIDTH / 2, 15)
     pg.display.flip()
     waitForKey()
 
@@ -32,6 +45,13 @@ def show_go_screen(surf, score, running):
     draw_text(surf, "GAME OVER", 48, WHITE, WIDTH / 2, HEIGHT / 4)
     draw_text(surf, "Score: "+ str(score), 22, WHITE, WIDTH / 2, HEIGHT / 2)
     draw_text(surf, "Press any key to exit", 22, WHITE, WIDTH / 2, HEIGHT * 3 / 4)
+    if score > load_data():
+        highscore = score
+        draw_text(surf, "New High Score: " + str(load_data()), 22, WHITE, WIDTH / 2, 15)
+        with open(os.path.join(game_Folder, HS_FILE), 'w') as f:
+            f.write(str(score))
+    else:
+        draw_text(surf, "High Score: " + str(load_data()), 22, WHITE, WIDTH / 2, 15)
     pg.display.flip()
     waitForKey()
 
@@ -54,6 +74,7 @@ def draw_text(surf, text, size, color, x, y):
     surf.blit(text_surface, text_rect)
 
 
+
 def main():
     # set score
     score = 0
@@ -64,6 +85,8 @@ def main():
 
     show_start_screen(screen)
     running = True
+
+    load_data()
 
 
 
