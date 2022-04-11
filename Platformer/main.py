@@ -25,8 +25,15 @@ def show_start_screen(surf):
     pg.display.flip()
     waitForKey()
 
-def show_go_screen():
-    pass
+def show_go_screen(surf, score, running):
+    if not running:
+        return
+    surf.fill(skyBlue)
+    draw_text(surf, "GAME OVER", 48, WHITE, WIDTH / 2, HEIGHT / 4)
+    draw_text(surf, "Score: "+ str(score), 22, WHITE, WIDTH / 2, HEIGHT / 2)
+    draw_text(surf, "Press any key to exit", 22, WHITE, WIDTH / 2, HEIGHT * 3 / 4)
+    pg.display.flip()
+    waitForKey()
 
 def waitForKey():
     waiting = True
@@ -48,15 +55,15 @@ def draw_text(surf, text, size, color, x, y):
 
 
 def main():
-    running = True
-
     # set score
     score = 0
 
-
-    #Create game objects
+    # Create game objects
     screen = pg.display.set_mode((WIDTH, HEIGHT))
     pg.display.set_caption(TITLE)
+
+    show_start_screen(screen)
+    running = True
 
 
 
@@ -147,6 +154,8 @@ def main():
                     sprite.kill()
 
         if len(platforms_group) == 0:
+            # show game over screen
+            show_go_screen(screen, score, running)
             running = False
 
 
@@ -156,6 +165,8 @@ def main():
         draw_text(screen, str(score), 22, WHITE, WIDTH / 2, 50)
 
         pg.display.flip() #flips screen MUST BE THE LAST THING CALLED
+
+
 
 
 main()
