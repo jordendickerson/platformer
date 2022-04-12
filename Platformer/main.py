@@ -29,7 +29,7 @@ def load_data():
             return highscore
         except:
             highscore = 0
-            return highscore
+
 
 def show_start_screen(surf):
     cur_highscore = load_data()
@@ -165,6 +165,7 @@ def main():
                 if plat.rect.top >= HEIGHT:
                     plat.kill()
                     score += 10
+
 
         # span new platforms to keep same average number
         while len(platforms_group) < 6:
