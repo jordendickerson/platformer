@@ -5,7 +5,7 @@ from settings import *
 import pygame as pg
 from sprites import *
 
-#CURRENT BUGS: High score will not read, but will write.
+#CURRENT BUGS: High score will not write, but will read.
 
 
 
@@ -19,39 +19,43 @@ font_name = pg.font.match_font(FONT_NAME)
 #set clock
 clock = pg.time.Clock()
 
+
+
 def load_data():
-    #load high score
-    with open(os.path.join(game_Folder, HS_FILE), 'w') as f:
+    # load high score
+    with open(os.path.join(game_Folder, HS_FILE), 'r+') as f:
         try:
-            highscore = int(f.read())
+            highscore = f.read()
+            return highscore
         except:
             highscore = 0
-    return highscore
+            return highscore
 
 def show_start_screen(surf):
-    cur_highscore = str(load_data())
+    cur_highscore = load_data()
     surf.fill(skyBlue)
     draw_text(surf, TITLE, 48, WHITE, WIDTH / 2, HEIGHT / 4)
     draw_text(surf, "Arrows to move, Space to Jump", 22, WHITE, WIDTH /2, HEIGHT / 2)
     draw_text(surf, "Press any key to play", 22, WHITE, WIDTH / 2, HEIGHT * 3/4)
-    draw_text(surf, "High Score: "+cur_highscore, 22, WHITE, WIDTH / 2, 15)
+    draw_text(surf, "High Score: "+str(cur_highscore), 22, WHITE, WIDTH / 2, 15)
     pg.display.flip()
     waitForKey()
 
 def show_go_screen(surf, score, running):
+    cur_highscore = load_data()
     if not running:
         return
     surf.fill(skyBlue)
     draw_text(surf, "GAME OVER", 48, WHITE, WIDTH / 2, HEIGHT / 4)
     draw_text(surf, "Score: "+ str(score), 22, WHITE, WIDTH / 2, HEIGHT / 2)
     draw_text(surf, "Press any key to exit", 22, WHITE, WIDTH / 2, HEIGHT * 3 / 4)
-    if score > load_data():
+    if score > int(load_data()):
         highscore = score
-        draw_text(surf, "New High Score: " + str(load_data()), 22, WHITE, WIDTH / 2, 15)
+        draw_text(surf, "New High Score: " + str(score), 22, WHITE, WIDTH / 2, 15)
         with open(os.path.join(game_Folder, HS_FILE), 'w') as f:
             f.write(str(score))
     else:
-        draw_text(surf, "High Score: " + str(load_data()), 22, WHITE, WIDTH / 2, 15)
+        draw_text(surf, "High Score: " + str(cur_highscore), 22, WHITE, WIDTH / 2, 15)
     pg.display.flip()
     waitForKey()
 

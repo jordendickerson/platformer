@@ -16,6 +16,7 @@ class Player(pg.sprite.Sprite):
         self.vel = vec(0,0)
         self.acc = vec(0,0)
 
+
     def jump(self):
             self.vel.y = -PLAYER_JUMP
 

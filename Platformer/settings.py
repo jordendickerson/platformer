@@ -12,7 +12,6 @@ print(img_Folder)
 
 #High score file
 HS_FILE = "highscore.txt"
-highscore = open(os.path.join(game_Folder, HS_FILE), 'w')
 
 
 # game title
