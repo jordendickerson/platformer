@@ -5,6 +5,7 @@ import settings
 from settings import *
 import pygame as pg
 from sprites import *
+import os
 
 # KNOWN BUGS:
 # NONE FOR NOW
@@ -39,18 +40,17 @@ class Game:
             except:
                 highscore = 0
         # load spritesheet image
-        spritesheet = Spritesheet(os.path.join(img_Folder, SPRITESHEET))
+        self.spritesheet = Spritesheet(os.path.join(img_Folder, SPRITESHEET))
         return highscore
 
 
 
     def show_start_screen(self):
-        cur_highscore = self.load_data()
         self.screen.fill(skyBlue)
         self.draw_text(TITLE, 48, WHITE, WIDTH / 2, HEIGHT / 4)
         self.draw_text("Arrows to move, Space to Jump", 22, WHITE, WIDTH /2, HEIGHT / 2)
         self.draw_text("Press any key to play", 22, WHITE, WIDTH / 2, HEIGHT * 3/4)
-        self.draw_text("High Score: "+str(cur_highscore), 22, WHITE, WIDTH / 2, 15)
+        self.draw_text("High Score: "+str(self.load_data()), 22, WHITE, WIDTH / 2, 15)
         pg.display.flip()
         self.waitForKey()
 
@@ -93,6 +93,7 @@ class Game:
 
     def new(self):
         # start a new game
+        self.load_data()
         self.score = 0
         self.all_sprites = pg.sprite.Group()
         self.platforms = pg.sprite.Group()

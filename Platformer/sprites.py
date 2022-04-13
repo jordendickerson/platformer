@@ -13,14 +13,15 @@ class Spritesheet:
         # grab an image out of a larger spritesheet
         image = pg.Surface((width, height))
         image.blit(self.spritesheet, (0,0), (x,y,width,height))
+        image = pg.transform.scale(image, (width / 2, height / 2))
         return image
 
 class Player(pg.sprite.Sprite):
     def __init__(self, game):
         pg.sprite.Sprite.__init__(self)
         self.game = game
-        self.image = pygame.Surface((PLAYER_WIDTH,PLAYER_HEIGHT))
-        self.image.fill(YELLOW)
+        self.image = self.game.spritesheet.get_image(614,1063,120,191)
+        self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
         self.rect.center = (WIDTH / 2, HEIGHT / 2)
         self.pos = vec(WIDTH / 2, HEIGHT / 2)
