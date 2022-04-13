@@ -29,19 +29,21 @@ class Game:
         self.screen = pg.display.set_mode((WIDTH, HEIGHT))
         self.running = True
 
+        self.load_data()
+
 
 
     def load_data(self):
         # load high score
         with open(os.path.join(game_Folder, HS_FILE), 'r+') as f:
             try:
-                highscore = f.read()
+                self.highscore = f.read()
                 # return highscore
             except:
-                highscore = 0
+                self.highscore = 0
         # load spritesheet image
         self.spritesheet = Spritesheet(os.path.join(img_Folder, SPRITESHEET))
-        return highscore
+
 
 
 
@@ -50,25 +52,24 @@ class Game:
         self.draw_text(TITLE, 48, WHITE, WIDTH / 2, HEIGHT / 4)
         self.draw_text("Arrows to move, Space to Jump", 22, WHITE, WIDTH /2, HEIGHT / 2)
         self.draw_text("Press any key to play", 22, WHITE, WIDTH / 2, HEIGHT * 3/4)
-        self.draw_text("High Score: "+str(self.load_data()), 22, WHITE, WIDTH / 2, 15)
+        self.draw_text("High Score: "+str(self.highscore), 22, WHITE, WIDTH / 2, 15)
         pg.display.flip()
         self.waitForKey()
 
     def show_go_screen(self):
-        cur_highscore = self.load_data()
         if not self.running:
             return
         self.screen.fill(skyBlue)
         self.draw_text("GAME OVER", 48, WHITE, WIDTH / 2, HEIGHT / 4)
         self.draw_text("Score: "+ str(self.score), 22, WHITE, WIDTH / 2, HEIGHT / 2)
         self.draw_text("Press any key to exit", 22, WHITE, WIDTH / 2, HEIGHT * 3 / 4)
-        if self.score > int(self.load_data()):
+        if self.score > int(self.highscore):
             highscore = self.score
             self.draw_text("New High Score: " + str(self.score), 22, WHITE, WIDTH / 2, 15)
             with open(os.path.join(game_Folder, HS_FILE), 'w') as f:
                 f.write(str(self.score))
         else:
-            self.draw_text("High Score: " + str(cur_highscore), 22, WHITE, WIDTH / 2, 15)
+            self.draw_text("High Score: " + str(self.highscore), 22, WHITE, WIDTH / 2, 15)
         pg.display.flip()
         self.waitForKey()
 
