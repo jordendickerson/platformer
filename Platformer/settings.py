@@ -13,6 +13,9 @@ print(img_Folder)
 #High score file
 HS_FILE = "highscore.txt"
 
+#Spritesheet file
+SPRITESHEET = "spritesheet_jumper.png"
+
 
 # game title
 TITLE = "Platformer" #Sets title

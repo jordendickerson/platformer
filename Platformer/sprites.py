@@ -5,9 +5,20 @@ import pygame as pg
 
 vec = pg.math.Vector2
 
+class Spritesheet:
+    #utility class for loading and parsing spritesheets
+    def __init__(self, filename):
+        self.spritesheet = pg.image.load(filename).convert()
+    def get_image(self, x , y, width, height):
+        # grab an image out of a larger spritesheet
+        image = pg.Surface((width, height))
+        image.blit(self.spritesheet, (0,0), (x,y,width,height))
+        return image
+
 class Player(pg.sprite.Sprite):
-    def __init__(self):
+    def __init__(self, game):
         pg.sprite.Sprite.__init__(self)
+        self.game = game
         self.image = pygame.Surface((PLAYER_WIDTH,PLAYER_HEIGHT))
         self.image.fill(YELLOW)
         self.rect = self.image.get_rect()
@@ -18,6 +29,11 @@ class Player(pg.sprite.Sprite):
 
 
     def jump(self):
+        # jump only if standing on a platform
+        self.rect.y += 1
+        hits = pg.sprite.spritecollide(self, self.game.platforms, False)
+        self.rect.y -= 1
+        if hits:
             self.vel.y = -PLAYER_JUMP
 
     def update(self):
