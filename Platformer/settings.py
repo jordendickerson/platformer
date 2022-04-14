@@ -35,6 +35,10 @@ PLAYER_FRICTION = -.12
 PLAYER_GRAV = 0.8
 PLAYER_JUMP = 20
 
+# Game Properties
+BOOST_POWER = 60
+POW_SPAWN_PCT = 7
+
 # starting platforms
 PLATFORM_LIST = [(0, HEIGHT - 60),
                  (WIDTH / 2 - 50, HEIGHT * 3 / 4 - 50),
