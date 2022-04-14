@@ -18,23 +18,16 @@ import os
 
 class Game:
     def __init__(self):
-
         # setup pygame
         pg.init()
         pg.mixer.init()
-
         #set font name
         self.font_name = pg.font.match_font(FONT_NAME)
-
         #set clock
         self.clock = pg.time.Clock()
-
         self.screen = pg.display.set_mode((WIDTH, HEIGHT))
         self.running = True
-
         self.load_data()
-
-
 
     def load_data(self):
         # load high score
@@ -46,6 +39,11 @@ class Game:
                 self.highscore = 0
         # load spritesheet image
         self.spritesheet = Spritesheet(os.path.join(img_Folder, SPRITESHEET))
+        #cloud images
+        self.cloud_images = []
+        for i in range(1, 4):
+            self.cloud_images.append(pg.image.load(os.path.join(img_Folder, 'cloud{}.png'.format(i))).convert())
+        #load sounds
         self.jump_sound = pg.mixer.Sound(os.path.join(audio_Folder, 'Jump33.wav'))
         self.pow_sound = pg.mixer.Sound(os.path.join(audio_Folder, 'Boost16.wav'))
 
@@ -58,11 +56,15 @@ class Game:
         self.platforms = pg.sprite.Group()
         self.powerups = pg.sprite.Group()
         self.mobs = pg.sprite.Group()
+        self.clouds = pg.sprite.Group()
         self.player = Player(self)
         for plat in PLATFORM_LIST:
             Platform(self, *plat)
         self.mob_timer = 0
         pg.mixer.music.load(os.path.join(audio_Folder, 'happytune.wav'))
+        for i in range(6):
+            c = Cloud(self)
+            c.rect.y += 500
         self.run()
 
     def run(self):
@@ -106,9 +108,17 @@ class Game:
 
         # if player reaches top 1/4 of screen
         if self.player.rect.top <= HEIGHT / 4:
+            #cloud spawn percentage
+            if randrange(100) < 4:
+                Cloud(self)
             self.player.pos.y += max(abs(self.player.vel.y), 2)
+            #spawn clouds
+            for cloud in self.clouds:
+                cloud.rect.y += max(abs(self.player.vel.y / randrange(24,1000)), 2)
+            #spawn mobs
             for mob in self.mobs:
                 mob.rect.y += max(abs(self.player.vel.y), 2)
+            #spawn platforms
             for plat in self.platforms:
                 plat.rect.y += max(abs(self.player.vel.y), 2)
                 if plat.rect.top >= HEIGHT:
