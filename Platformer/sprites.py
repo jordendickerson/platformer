@@ -15,7 +15,7 @@ class Spritesheet:
         # grab an image out of a larger spritesheet
         image = pg.Surface((width, height))
         image.blit(self.spritesheet, (0,0), (x,y,width,height))
-        image = pg.transform.scale(image, (width / 2, height / 2))
+        image = pg.transform.scale(image, (int(width / 2), int(height / 2)))
         return image
 
 class Player(pg.sprite.Sprite):
@@ -110,6 +110,8 @@ class Player(pg.sprite.Sprite):
                 self.rect = self.image.get_rect()
                 self.rect.bottom = bottom
 
+        self.mask = pg.mask.from_surface(self.image)
+
 
         #idle animation
         if not self.jumping and not self.walking:
@@ -187,6 +189,7 @@ class Mob(pg.sprite.Sprite):
         else:
             self.image = self.image_down
         self.rect = self.image.get_rect()
+        self.mask = pg.mask.from_surface(self.image)
         self.rect.center = center
         self.rect.y += self.vy
         if self.rect.left > WIDTH + 100 or self.rect.right < -100:
