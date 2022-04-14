@@ -18,7 +18,7 @@ SPRITESHEET = "spritesheet_jumper.png"
 
 
 # game title
-TITLE = "Platformer" #Sets title
+TITLE = "Hop!" #Sets title
 FONT_NAME = 'arial'
 
 # screen size
@@ -36,10 +36,10 @@ PLAYER_GRAV = 0.8
 PLAYER_JUMP = 20
 
 # starting platforms
-PLATFORM_LIST = [(0, HEIGHT - 40),
-                 (WIDTH / 2 - 50, HEIGHT * 3 / 4),
-                 (20, HEIGHT - 350),
-                 (300, 200),
+PLATFORM_LIST = [(0, HEIGHT - 60),
+                 (WIDTH / 2 - 50, HEIGHT * 3 / 4 - 50),
+                 (125, HEIGHT - 350),
+                 (350, 200),
                  (175, 100)]
 # clock speed
 FPS = 60 #sets frames per second (clock tick)

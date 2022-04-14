@@ -1,6 +1,9 @@
 # Main game File
 # PACKAGE INSTALLATION REQUIREMENTS: 'pip install pygame'
-#Artwork by Kenney
+#Artwork by Kenney.nl
+# Happy Tune by http://opengameart.org/users/syncopika
+# Yippee by http://opengameart.org/users/snabisch
+
 import settings
 from settings import *
 import pygame as pg
@@ -43,6 +46,7 @@ class Game:
                 self.highscore = 0
         # load spritesheet image
         self.spritesheet = Spritesheet(os.path.join(img_Folder, SPRITESHEET))
+        self.jump_sound = pg.mixer.Sound(os.path.join(audio_Folder, 'Jump33.wav'))
 
 
     def new(self):
@@ -57,16 +61,19 @@ class Game:
             p = Platform(self, *plat)
             self.all_sprites.add(p)
             self.platforms.add(p)
+        pg.mixer.music.load(os.path.join(audio_Folder, 'happytune.wav'))
         self.run()
 
     def run(self):
         # Game Loop
+        pg.mixer.music.play(loops=-1)
         self.playing = True
         while self.playing:
             self.clock.tick(FPS)
             self.events()
             self.update()
             self.draw()
+        pg.mixer.music.fadeout(500)
 
     def update(self):
         # Game Loop - Update
@@ -135,15 +142,20 @@ class Game:
         pg.display.flip()
 
     def show_start_screen(self):
+        pg.mixer.music.load(os.path.join(audio_Folder, 'Yippee.wav'))
+        pg.mixer.music.play(loops=-1)
         self.screen.fill(skyBlue)
-        self.draw_text(TITLE, 48, WHITE, WIDTH / 2, HEIGHT / 4)
+        self.draw_text(TITLE, 100, WHITE, WIDTH / 2, HEIGHT / 4)
         self.draw_text("Arrows to move, Space to Jump", 22, WHITE, WIDTH /2, HEIGHT / 2)
         self.draw_text("Press any key to play", 22, WHITE, WIDTH / 2, HEIGHT * 3/4)
         self.draw_text("High Score: "+str(self.highscore), 22, WHITE, WIDTH / 2, 15)
         pg.display.flip()
         self.waitForKey()
+        pg.mixer.music.fadeout(500)
 
     def show_go_screen(self):
+        pg.mixer.music.load(os.path.join(audio_Folder, 'Yippee.wav'))
+        pg.mixer.music.play(loops=-1)
         if not self.running:
             return
         self.screen.fill(skyBlue)
@@ -159,6 +171,7 @@ class Game:
             self.draw_text("High Score: " + str(self.highscore), 22, WHITE, WIDTH / 2, 15)
         pg.display.flip()
         self.waitForKey()
+        pg.mixer.music.fadeout(500)
 
     def waitForKey(self):
         waiting = True
